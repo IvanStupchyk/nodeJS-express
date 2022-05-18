@@ -2,9 +2,12 @@ const express = require('express')
 const session = require('express-session')
 const MongoStore = require('connect-mongodb-session')(session)
 const path = require('path')
+const csrf = require('csurf')
+const flash = require('connect-flash')
 const mongoose = require('mongoose')
 const Handlebars = require('handlebars')
 const exphbs = require('express-handlebars')
+const cookieParser = require('cookie-parser');
 const { allowInsecurePrototypeAccess } = require('@handlebars/allow-prototype-access')
 const homeRoutes = require('./routes/home')
 const addRoutes = require('./routes/add')
@@ -43,6 +46,11 @@ app.use(session({
   saveUninitialized: false,
   store
 }))
+app.use(cookieParser())
+app.use(csrf({
+  cookie: true
+}))
+app.use(flash())
 app.use(varMiddleware)
 app.use(userMiddleware)
 
