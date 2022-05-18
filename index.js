@@ -13,6 +13,7 @@ const authRoutes = require('./routes/auth')
 const cardRoutes = require('./routes/card')
 const coursesRoutes = require('./routes/courses')
 const varMiddleware = require('./middleware/variables')
+const userMiddleware = require('./middleware/user')
 
 const MONGODB_URL = 'mongodb+srv://ivanStupchyk:7915465@cluster0.yrnll.mongodb.net/myFirstDatabase?retryWrites=true&w=majority';
 
@@ -43,6 +44,7 @@ app.use(session({
   store
 }))
 app.use(varMiddleware)
+app.use(userMiddleware)
 
 
 app.use('/', homeRoutes)
