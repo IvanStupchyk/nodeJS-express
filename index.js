@@ -17,20 +17,21 @@ const cardRoutes = require('./routes/card')
 const coursesRoutes = require('./routes/courses')
 const varMiddleware = require('./middleware/variables')
 const userMiddleware = require('./middleware/user')
+const keys = require('./keys')
 
-const MONGODB_URL = 'mongodb+srv://ivanStupchyk:7915465@cluster0.yrnll.mongodb.net/myFirstDatabase?retryWrites=true&w=majority';
 
 const app = express()
 
 const hbs = exphbs.create({
   defaultLayout: 'main',
   extname: 'hbs',
-  handlebars: allowInsecurePrototypeAccess(Handlebars)
+  handlebars: allowInsecurePrototypeAccess(Handlebars),
+  helpers: require('./utils/hbs-helpers')
 })
 
 const store = new MongoStore({
   collection: 'sessions',
-  uri: MONGODB_URL
+  uri: keys.MONGODB_URL
 })
 
 app.engine('hbs', hbs.engine)
@@ -41,7 +42,7 @@ app.use(express.static(path.join(__dirname, 'public')))
 app.use(express.urlencoded({extended: true}))
 
 app.use(session({
-  secret: 'some secret value',
+  secret: keys.SESSION_SECRET,
   resave: false,
   saveUninitialized: false,
   store
@@ -68,7 +69,7 @@ async function start() {
   try {
 
 
-    await mongoose.connect(MONGODB_URL, {
+    await mongoose.connect(keys.MONGODB_URL, {
       useNewUrlParser: true,
     })
 
@@ -81,9 +82,3 @@ async function start() {
 }
 
 start()
-
-
-
-
-const PASSWORD = 7915465;
-const USER_NAME = 'ivanStupchyk';
